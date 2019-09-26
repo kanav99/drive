@@ -5,3 +5,9 @@ class InvalidCommand(Exception):
 class CDError(Exception):
 	pass
 
+class DownloadError(Exception):
+	pass
+
+class LSError(Exception):
+	pass
+

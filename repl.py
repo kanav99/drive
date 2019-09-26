@@ -2,6 +2,9 @@ from init import driveinit
 from colors import red, green, blue, bold
 from repl_state import REPLState
 from commands import parse_command
+
+DEVELOPMENT_MODE = False
+
 """
 Firing up the Drive Terminal
 """
@@ -13,10 +16,19 @@ def repl():
     while True:
         try:
             print("{}{}$ ".format(identifier, bold(blue(state.get_pwd()))), end="")
-            command = input().strip()
+            command = input()
             parse_command(command, state, driveapi)
+        except KeyboardInterrupt:
+            print()
+            continue
+        except EOFError:
+            print()
+            exit()
         except Exception as e:
-            raise e
+            if DEVELOPMENT_MODE:
+                raise e
+            else:
+                print(e)
 
 if __name__ == '__main__':
     repl()
