@@ -1,7 +1,9 @@
 from init import driveinit
 from colors import red, green, blue, bold
 from repl_state import REPLState
-from commands import parse_command
+from parser import parse_command
+from autocomplete import AutoCompleter
+import readline
 
 DEVELOPMENT_MODE = False
 
@@ -13,10 +15,12 @@ def repl():
     print((bold("Google Drive Terminal v0.0.1")))
     driveapi = driveinit()
     identifier = bold(green('drive:'))
+    completer = AutoCompleter(["cd", "ls", "dl", "download"])
+    readline.set_completer(completer.complete)
+    readline.parse_and_bind('tab: complete')
     while True:
         try:
-            print("{}{}$ ".format(identifier, bold(blue(state.get_pwd()))), end="")
-            command = input()
+            command = input("{}{}$ ".format(identifier, bold(blue(state.get_pwd()))))
             parse_command(command, state, driveapi)
         except KeyboardInterrupt:
             print()
